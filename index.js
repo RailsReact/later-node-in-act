@@ -1,15 +1,22 @@
 const express = require('express');
 const app = express();
 const articles = [{title: 'This is exaple article'}];
+const bodyParser = require('body-parser');
 
 app.set('port',process.env.PORT || 3000);
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/articles', (req, res, next)=>{
   res.send(articles);
 });
 
 app.post('/articles', (req, res, next)=>{
-  res.send('OK');
+  const article = {title: req.body.title};
+  articles.push(article);
+  res.send(article);
+  //curl --data "title=Example POST article" http://localhost:3000/articles
 });
 
 app.get('/articles/:id', (req, res, next)=>{
